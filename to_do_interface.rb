@@ -1,7 +1,6 @@
 require './lib/task'
 require './lib/list'
 
-# @list = []
 @completed = []
 
 def main_menu
@@ -33,19 +32,19 @@ end
 def add_list
   puts "Enter a description of the new list:"
   user_description = gets.chomp
-  new_list = List.new(user_description)
-  @@all_tasks << new_list
+  # new_list = List.new(user_description)
+  new_list = List.create(user_description)
   puts "List added.\n"
   puts "\n"
   main_menu
 end
 
 def show_lists
-  if @list.empty?
+  if List.all.empty?
     puts "Nothing in list.  Create a list."
   else
     puts "Here are all your lists:"
-    @list.each_with_index do |list, index|
+    List.all.each_with_index do |list, index|
       puts "#{index + 1}. #{list.title}"    ##description is the method
     end
     select_list
@@ -67,19 +66,19 @@ def select_list
   user_input = gets.chomp
   user_input = (user_input.to_i) - 1
   puts "Your tasks:"
-  @list[user_input].tasks.each_with_index do |task, index|
+  List.all[user_input].tasks.each_with_index do |task, index|
     puts "#{index + 1}.  #{task.description} --DO BY: #{task.due_date} --PRIORITY: #{task.priority}"
   end
 end
 
 def add_task
   puts "Select a list to add a task. \n"
-  @list.each_with_index do |list, index|
+  List.all.each_with_index do |list, index|
     puts "#{index + 1}. #{list.title}"    ##description is the method
   end
   user_input = gets.chomp
   user_input = (user_input.to_i) - 1
-  puts "You selected: #{@list[user_input].title}"
+  puts "You selected: #{List.all[user_input].title}"
   puts "Enter a description of the new task:"
   user_description = gets.chomp
 
@@ -88,7 +87,7 @@ def add_task
   user_priority = priority_input
 
   task_to_add = Task.new(user_description, user_date, user_priority)
-  @list[user_input].add_task(task_to_add)
+  List.all[user_input].add_task(task_to_add)
 
   puts "Task added.\n"
   puts "\n"
@@ -136,13 +135,13 @@ end
 
 def priority_sort
   puts "Pick a list to sort by priority."
-  @list.each_with_index do |list, index|
+  List.all.each_with_index do |list, index|
     puts "#{index + 1}. #{list.title}"    ##description is the method
   end
   user_input = gets.chomp
   user_input = (user_input.to_i) - 1
-  @list[user_input].priority_sort
-  @list[user_input].tasks.each_with_index do |task, index|
+  List.all[user_input].priority_sort
+  List.all[user_input].tasks.each_with_index do |task, index|
     puts "#{index + 1}.  #{task.description} --DO BY: #{task.due_date} --PRIORITY: #{task.priority}"
   end
   main_menu
@@ -150,13 +149,13 @@ end
 
 def due_date_sort
   puts "Pick a list to sort by due date."
-  @list.each_with_index do |list, index|
+  List.all.each_with_index do |list, index|
     puts "#{index + 1}. #{list.title}"    ##description is the method
   end
   user_input = gets.chomp
   user_input = (user_input.to_i) - 1
-  @list[user_input].due_date_sort
-  @list[user_input].tasks.each_with_index do |task, index|
+  List.all[user_input].due_date_sort
+  List.all[user_input].tasks.each_with_index do |task, index|
     puts "#{index + 1}.  #{task.description} --DO BY: #{task.due_date} --PRIORITY: #{task.priority}"
   end
   main_menu
@@ -164,18 +163,18 @@ end
 
 
 def remove_task
-  if @list.empty?
+  if List.all.empty?
     puts "Nothing in list"
   else
     puts "Type the number to mark as completed"
-    @list.each_with_index do |task, index|
+    List.all.each_with_index do |task, index|
       puts "#{index + 1}. #{task.description} --DO BY: #{task.due_date} --PRIORITY: #{task.priority}"    ##description is the method
     end
     user_input = gets.chomp
     user_input = (user_input.to_i) - 1
-    @completed << @list[user_input]
-    @list[user_input].completed
-    @list.delete_at(user_input)
+    @completed << # what goes here?
+    List.all[user_input].completed
+    List.all.delete_at(user_input)
     puts "Task completed"
   end
   puts "\n"
